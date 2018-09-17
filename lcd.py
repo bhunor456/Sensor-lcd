@@ -40,7 +40,7 @@ def distance ():
     distance = (TimeElapsed * 34000) / 2
     return distance
 
-if __name__ == __'main'__:
+if __name__ == '__main__':
     try:
         while True:
             dist = distance()
