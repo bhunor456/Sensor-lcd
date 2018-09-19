@@ -13,42 +13,35 @@ LCD4_D6 = 22 #16-os GPIO láb, D6
 LCD5_D7 = 5 #18-as GPIO láb, D7
 
 #HC-SR04 szenzor
-Echo = 20 # echo, GPIO 20-as láb
-Trig = 21 #trig, GPIO, 21-es láb
+ECHO = 20 # echo, GPIO 20-as láb
+TRIG = 21 #trig, GPIO, 21-es láb
 
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
 
-def distance ():
-    print("Mérés indul!")
-    GPIO.output(GPIO_TRIGGER, True)
 
-    time.sleep(0.00001)
-    GPIO.output(GPIO_TRIGGER, False)
+print("Mérésre készen!")
 
-    StartTime = time.time()
-    StopTime = time.time()
 
-    while GPIO.input(GPIO_ECHO) == 0:
-        StartTime = time.time()
+GPIO.output(GPIO_TRIGGER, True)
 
-    while GPIO.input(GPIO_ECHO) == 1:
-        StopTime = time.time
+time.sleep(0.00001)
+GPIO.output(GPIO_TRIGGER, False)
 
-    TimeElapsed = StopTime - StartTime 
+   
+while GPIO.input(ECHO)==0:
+    pulse_start = time.time()
 
-    distance = (TimeElapsed * 34000) / 2
-    return distance
+while GPIO.input(ECHO)==1:
+    pulse_end = time.time
 
-if __name__ == '__main__':
-    try:
-        while True:
-            dist = distance()
-            print("Mért távolság %.1f cm" %dist)
-            time.sleep(1)
+pulse_duration = pulse_end - pulse_start 
 
-    except KeyboardInterrupt:
-        print("A mérés megszakadt, leáll")
+distance = pulse_duration * 17150
+
+distance = round(distance, 2)
+
+print("Távolság:",distance,"cm")
 
 #HC_SR-04 szenzor
 
@@ -58,21 +51,26 @@ LCD_CHR = True
 LCD_CMD = False
 
 LCD_LINE_1 = 0x80
-LCD_LINE_2 = 0xC0
+LCD_LINE_2 = 0xcC
 
-E_PULSE = 0.00005
-E_DELAY = 0.00005
+E_PULSE = 0.0005
+E_DELAY = 0.0005
 
 def main():
-#GPIO.setup(LCD1_E, GPIO.OUT)
-#GPIO.setup(LCD3_D4, GPIO.OUT)
-#GPIO.setup(LCD4_D5, GPIO.OUT)
-#GPIO.setup(LCD5_D6, GPIO.OUT)
-#GPIO.setup(LCD6_D7, GPIO.OUT)
+    GPIO.setup(LCD1_E,GPIO.OUT)
+    GPIO.setup(LCD2_RS,GPIO.OUT)
+    GPIO.setup(LCD3_D4,GPIO.OUT)
+    GPIO.setup(LCD4_D5,GPIO.OUT)
+    GPIO.setup(LCD5_D6,GPIO.OUT)
+    GPIO.setup(LCD6_D7,GPIO.OUT)
+
+lcd_init()
+
+while True:
+    lcd_string("Raspberry Pi3 model B",LCD_LINE_1)
 
 
-
-#lcd = CharLCD(cols=16, rows=2, pin_rs=37, pin_e=35, pins_data=[33, 31, 29, 23])
+#lcd = CharLCD(cols=16, rows=2, pin_rs=27, pin_e=4, pins_data=[17, 27, 22, 5])
 def main():
     lcd_init()
     GPIO.output(LED_ON, True)
@@ -106,17 +104,6 @@ def main():
     time.sleep(30)
 
     GPIO.output(LED_ON, False)
-
-
-def lcd_init():
-
-GPIO.setup(LCD1_E,GPIO.OUT)
-GPIO.setup(LCD2_RS,GPIO.OUT)
-GPIO.setup(LCD3_D4,GPIO.OUT)
-GPIO.setup(LCD4_D5,GPIO.OUT)
-GPIO.setup(LCD5_D6,GPIO.OUT)
-GPIO.setup(LCD6_D7,GPIO.OUT)
-
 
 
 lcd_byte(0x33,LCD_CMD)
