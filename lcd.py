@@ -10,7 +10,7 @@ LCD2_RS = 27 # 36-os GPIO láb, RS
 LCD2_D4 = 17 #11-es GPIO láb, D4
 LCD3_D5 = 27 #13-as GPIO lán, D5
 LCD4_D6 = 22 #16-os GPIO láb, D6
-LCD5_D7 = 5 #18-as GPIO láb, D7
+LCD5_D7 = 12 #32-as GPIO láb, D7
 
 #HC-SR04 szenzor
 ECHO = 20 # echo, GPIO 20-as láb
